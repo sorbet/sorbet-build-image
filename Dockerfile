@@ -7,7 +7,7 @@ RUN apt-get update && \
       ./bazel version
 
 ENV PATH=/root/.rbenv/bin:/root/.rbenv/shims:$PATH
-RUN apt-get install libssl-dev libreadline-dev
+RUN apt-get install libssl-dev libreadline-dev -y
 RUN curl -fsSL https://raw.githubusercontent.com/rbenv/rbenv-installer/108c12307621a0aa06f19799641848dde1987deb/bin/rbenv-installer | bash -x
 RUN echo 'eval "$(rbenv init -)"' >> /etc/profile.d/rbenv.sh
 RUN echo 'eval "$(rbenv init -)"' >> /root/.bashrc
