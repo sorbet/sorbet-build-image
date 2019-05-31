@@ -13,4 +13,5 @@ RUN echo 'eval "$(rbenv init -)"' >> /etc/profile.d/rbenv.sh
 RUN echo 'eval "$(rbenv init -)"' >> /root/.bashrc
 RUN rbenv install 2.4.3 && \
       rbenv global 2.4.3 && \
-      gem install bundler
+      gem install bundler && \
+      ln -s /root/.rbenv/versions/2.4.3 /root/.rbenv/versions/2.4
