@@ -2,7 +2,7 @@ FROM ubuntu:18.04
 
 ADD bazel_loader bazel_loader
 RUN apt-get update && \
-      apt-get install --no-install-recommends -y curl ca-certificates software-properties-common debconf-utils git pkg-config zip g++ zlib1g-dev unzip autoconf python patch shellcheck moreutils make ruby && \
+      apt-get install --no-install-recommends -y curl ca-certificates software-properties-common debconf-utils git pkg-config zip g++ zlib1g-dev unzip autoconf python patch shellcheck moreutils make ruby nodejs && \
       cd bazel_loader && \
       ./bazel version
 
