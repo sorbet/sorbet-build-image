@@ -3,8 +3,8 @@ FROM ubuntu:18.04
 ADD bazel_loader bazel_loader
 RUN apt-get update && \
       apt-get install --no-install-recommends -y libssl-dev libreadline-dev curl ca-certificates software-properties-common debconf-utils git pkg-config zip g++ zlib1g-dev unzip autoconf python patch shellcheck moreutils make ruby nodejs libxml2 && \
-      curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - && \
-      echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list && \
+      curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+      echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
       apt-get update && \
       apt-get install --no-install-recommends -y yarn && \
       cd bazel_loader && \
