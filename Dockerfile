@@ -19,3 +19,8 @@ RUN rbenv install 2.4.3 && \
       rbenv global 2.4.3 && \
       gem install bundler && \
       ln -s /root/.rbenv/versions/2.4.3 /root/.rbenv/versions/2.4
+
+ENV TINI_VERSION v0.18.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static /tini
+RUN chmod +x /tini
+ENTRYPOINT ["/tini", "-g", "--"]
