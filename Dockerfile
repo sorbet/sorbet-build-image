@@ -15,10 +15,10 @@ ENV PATH=/root/.rbenv/bin:/root/.rbenv/shims:$PATH
 RUN curl -fsSL https://raw.githubusercontent.com/rbenv/rbenv-installer/108c12307621a0aa06f19799641848dde1987deb/bin/rbenv-installer | bash -x
 RUN echo 'eval "$(rbenv init -)"' >> /etc/profile.d/rbenv.sh
 RUN echo 'eval "$(rbenv init -)"' >> /root/.bashrc
-RUN rbenv install 2.4.3 && \
-      rbenv global 2.4.3 && \
+RUN rbenv install 2.6.3 && \
+      rbenv global 2.6.3 && \
       gem install bundler && \
-      ln -s /root/.rbenv/versions/2.4.3 /root/.rbenv/versions/2.4
+      ln -s /root/.rbenv/versions/2.6.3 /root/.rbenv/versions/2.6
 
 ENV TINI_VERSION v0.18.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static /tini
