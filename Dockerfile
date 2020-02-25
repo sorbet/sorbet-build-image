@@ -5,8 +5,9 @@ RUN apt-get update && \
       apt-get install --no-install-recommends -y autoconf ca-certificates curl debconf-utils file g++ git gpg-agent jq libreadline-dev libssl-dev libtinfo-dev libxml2 make moreutils nodejs openssh-client patch pkg-config python ruby rubygems shellcheck software-properties-common unzip wget xxd zip zlib1g-dev && \
       curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
       echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
+      echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-9 main" | tee /etc/apt/sources.list.d/llvm.list && \
       apt-get update && \
-      apt-get install --no-install-recommends -y yarn && \
+      apt-get install --no-install-recommends -y yarn clang-9 && \
       cd bazel_loader && \
       ./bazel version && \
       rm -rf /var/lib/apt/lists/*
