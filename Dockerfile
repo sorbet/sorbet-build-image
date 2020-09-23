@@ -2,7 +2,7 @@ FROM ubuntu:18.04
 
 ADD bazel_loader bazel_loader
 RUN apt-get update && \
-      apt-get install --no-install-recommends -y autoconf ca-certificates curl debconf-utils file g++ git gpg-agent jq libreadline-dev libssl-dev libtinfo-dev libxml2 make moreutils nodejs openssh-client patch pkg-config python ruby rubygems shellcheck software-properties-common unzip wget xxd zip zlib1g-dev && \
+      apt-get install --no-install-recommends -y autoconf ca-certificates curl debconf-utils file g++ git gpg-agent jq libgmp-dev libreadline-dev libssl-dev libtinfo-dev libxml2 make moreutils nodejs openssh-client patch pkg-config python ruby rubygems shellcheck software-properties-common unzip wget xxd zip zlib1g-dev && \
       curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
       echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
       curl -sS https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - && \
