@@ -1,6 +1,8 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 ADD bazel_loader bazel_loader
+
+ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && \
       apt-get install --no-install-recommends -y autoconf ca-certificates curl debconf-utils file g++ git gpg-agent jq libgmp-dev libreadline-dev libssl-dev libtinfo-dev libxml2 make moreutils nodejs openssh-client patch pkg-config python ruby rubygems shellcheck software-properties-common unzip wget xxd zip zlib1g-dev && \
       curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
