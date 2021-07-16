@@ -2,7 +2,7 @@ FROM ubuntu:18.04
 
 ADD bazel_loader bazel_loader
 RUN apt-get update && \
-      apt-get install --no-install-recommends -y autoconf ca-certificates curl debconf-utils file g++ git gpg-agent jq libgmp-dev libreadline-dev libssl-dev libtinfo-dev libxml2 make moreutils openssh-client patch pkg-config python ruby rubygems shellcheck software-properties-common unzip wget xxd zip zlib1g-dev && \
+      apt-get install --no-install-recommends -y autoconf ca-certificates curl debconf-utils file g++ git gpg-agent jq libgmp-dev libreadline-dev libssl-dev libtinfo-dev libxml2 make moreutils openssh-client patch pkg-config python ruby rubygems software-properties-common unzip wget xxd zip zlib1g-dev && \
       curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
       echo "deb https://deb.nodesource.com/node_14.x bionic main" | tee /etc/apt/sources.list.d/nodesource.list && \
       echo "deb-src https://deb.nodesource.com/node_14.x bionic main" | tee -a /etc/apt/sources.list.d/nodesource.list && \
@@ -15,6 +15,11 @@ RUN apt-get update && \
       cd bazel_loader && \
       ./bazel version && \
       rm -rf /var/lib/apt/lists/*
+
+RUN curl -fsSOL https://github.com/koalaman/shellcheck/releases/download/v0.7.2/shellcheck-v0.7.2.linux.x86_64.tar.xz && \
+     tar -xf shellcheck-v0.7.2.linux.x86_64.tar.xz && \
+     cp shellcheck-v0.7.2/shellcheck /usr/local/bin && \
+     shellcheck --version
 
 ENV PATH=/root/.rbenv/bin:/root/.rbenv/shims:$PATH
 RUN curl -fsSL https://raw.githubusercontent.com/rbenv/rbenv-installer/108c12307621a0aa06f19799641848dde1987deb/bin/rbenv-installer | bash -x
