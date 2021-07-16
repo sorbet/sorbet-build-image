@@ -19,6 +19,8 @@ RUN apt-get update && \
 RUN curl -fsSOL https://github.com/koalaman/shellcheck/releases/download/v0.7.2/shellcheck-v0.7.2.linux.x86_64.tar.xz && \
      tar -xf shellcheck-v0.7.2.linux.x86_64.tar.xz && \
      cp shellcheck-v0.7.2/shellcheck /usr/local/bin && \
+     rm -rf shellcheck-v0.7.2 && \
+     rm shellcheck-v0.7.2.linux.x86_64.tar.xz && \
      shellcheck --version
 
 ENV PATH=/root/.rbenv/bin:/root/.rbenv/shims:$PATH
