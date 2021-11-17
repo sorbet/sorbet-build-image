@@ -1,3 +1,6 @@
+# If you are a Stripe employee, please see https://go/types/sorbet-build-image
+# for instructions on how to deploy updates to this image.
+
 FROM ubuntu:18.04
 
 ADD bazel_loader bazel_loader
