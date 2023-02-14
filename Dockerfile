@@ -32,6 +32,7 @@ RUN echo 'eval "$(rbenv init -)"' >> /etc/profile.d/rbenv.sh
 RUN echo 'eval "$(rbenv init -)"' >> /root/.bashrc
 RUN rbenv install 2.7.2
 RUN rbenv global 2.7.2
+RUN rbenv install 2.7.7
 RUN rbenv install 3.1.2
 
 ENV TINI_VERSION v0.18.0
