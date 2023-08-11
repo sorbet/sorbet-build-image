@@ -37,12 +37,12 @@ else
   exit 1
 fi
 
-if [ "$(uname -m)" == "x86_64" ]; then
+if [ "$(arch)" == "x86_64" ]; then
   export BAZEL_LAUNCHER_ARCH_NAME='x86_64'
-elif [ "$(uname -m)" == "aarch64" ]; then
+elif [ "$(arch)" == "aarch64" ]; then
   export BAZEL_LAUNCHER_ARCH_NAME='aarch64'
 else
-  "Your architecture $(uname -m) is unsupported, sorry"
+  "Your architecture $(arch) is unsupported, sorry"
   exit 1
 fi
 

@@ -19,11 +19,11 @@ RUN apt-get update && \
       ./bazel version && \
       rm -rf /var/lib/apt/lists/*
 
-RUN curl -fsSOL https://github.com/koalaman/shellcheck/releases/download/v0.7.2/shellcheck-v0.7.2.linux.$(uname -m).tar.xz && \
-     tar -xf shellcheck-v0.7.2.linux.$(uname -m).tar.xz && \
+RUN curl -fsSOL https://github.com/koalaman/shellcheck/releases/download/v0.7.2/shellcheck-v0.7.2.linux.$(arch).tar.xz && \
+     tar -xf shellcheck-v0.7.2.linux.$(arch).tar.xz && \
      cp shellcheck-v0.7.2/shellcheck /usr/local/bin && \
      rm -rf shellcheck-v0.7.2 && \
-     rm shellcheck-v0.7.2.linux.$(uname -m).tar.xz && \
+     rm shellcheck-v0.7.2.linux.$(arch).tar.xz && \
      shellcheck --version
 
 ENV PATH=/root/.rbenv/bin:/root/.rbenv/shims:$PATH
