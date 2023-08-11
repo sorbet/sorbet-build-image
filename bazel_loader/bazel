@@ -37,6 +37,15 @@ else
   exit 1
 fi
 
+if [ "$(uname -m)" == "x86_64" ]; then
+  export BAZEL_LAUNCHER_ARCH_NAME='x86_64'
+elif [ "$(uname -m)" == "aarch64" ]; then
+  export BAZEL_LAUNCHER_ARCH_NAME='aarch64'
+else
+  "Your architecture $(uname -m) is unsupported, sorry"
+  exit 1
+fi
+
 if [ -z "$BAZEL_REMOTE_SOURCE" ]; then
   export BAZEL_REMOTE_SOURCE=https://github.com/bazelbuild/bazel/releases/download
 fi
@@ -147,7 +156,7 @@ done
 
 if [ -z "$BAZEL_INSTALLER_VERSION_SHA" ]; then
   ## TODO(gkk): load shas from stripe-build.yaml instead of WORKSPACE once the yaml file supports it
-  SHA_VARIABLE_NAME="BAZEL_INSTALLER_VERSION_${BAZEL_LAUNCHER_PLATFORM_NAME}_SHA"
+  SHA_VARIABLE_NAME="BAZEL_INSTALLER_VERSION_${BAZEL_LAUNCHER_PLATFORM_NAME}_${BAZEL_LAUNCHER_ARCH_NAME}_SHA"
   export BAZEL_INSTALLER_VERSION_SHA=$(cat $REPO_ROOT/WORKSPACE | egrep "^${SHA_VARIABLE_NAME}\s*=\s*" | sed -e 's/.*=//g' -e 's/ //g' -e 's/"//g')
 fi
 # So we can compare what we download against an expected SHA 256
@@ -183,7 +192,13 @@ mkdir -p $BUILD_DIR
   echo "Installing Bazel, this will take ~1min"
   cd $BUILD_DIR
 
-  INSTALLER_NAME="bazel-${BAZEL_VERSION}-installer-${BAZEL_LAUNCHER_PLATFORM_NAME}-x86_64.sh"
+  # when install script is not available, install the binary directly
+  if [[ "$BAZEL_LAUNCHER_ARCH_NAME" == "aarch64" ]]; then
+    INSTALLER_NAME="bazel-${BAZEL_VERSION}-${BAZEL_LAUNCHER_PLATFORM_NAME}-arm64"
+  else
+    INSTALLER_NAME="bazel-${BAZEL_VERSION}-installer-${BAZEL_LAUNCHER_PLATFORM_NAME}-${BAZEL_LAUNCHER_ARCH_NAME}.sh"
+  fi
+
   echo $PWD
   if [ -z $BAZEL_INSTALLER_PATH ]; then
     BAZEL_INSTALLER_PATH=$BAZEL_REMOTE_SOURCE/${BAZEL_VERSION}/$INSTALLER_NAME
@@ -201,8 +216,30 @@ mkdir -p $BUILD_DIR
     exit 1
   fi
 
-  chmod +x ${INSTALLER_NAME}
-  ./${INSTALLER_NAME} --base=${BAZEL_BIN_LOC}/${BAZEL_VERSION} --bin=${BAZEL_BIN_LOC}/${BAZEL_VERSION}/bin_t
+  BAZEL_INSTALL_BASE=${BAZEL_BIN_LOC}/${BAZEL_VERSION}
+  BAZEL_INSTALL_BIN=${BAZEL_BIN_LOC}/${BAZEL_VERSION}/bin_t
+
+  if [[ $INSTALLER_NAME == *.sh ]]; then
+    chmod +x ${INSTALLER_NAME}
+    ./${INSTALLER_NAME} --base=${BAZEL_INSTALL_BASE} --bin=${BAZEL_INSTALL_BIN}
+  else
+    # A lightweight bazel installation, adapted from
+    # https://github.com/bazelbuild/bazel/blob/master/scripts/packages/template_bin.sh#L159C2-L166
+    mkdir -p ${BAZEL_INSTALL_BIN} ${BAZEL_INSTALL_BASE}/bin ${BAZEL_INSTALL_BASE}/etc
+
+    cp ${INSTALLER_NAME} "${BAZEL_INSTALL_BASE}/bin/bazel-real"
+    # cp ${INSTALLER_NAME} "${BAZEL_INSTALL_BASE}/bin/bazel"
+    chmod 0755 "${BAZEL_INSTALL_BASE}/bin/bazel-real"
+    # chmod 0755 "${BAZEL_INSTALL_BASE}/bin/bazel"
+
+    chmod -R og-w "${BAZEL_INSTALL_BASE}"
+    chmod -R og+rX "${BAZEL_INSTALL_BASE}"
+    chmod -R u+rwX "${BAZEL_INSTALL_BASE}"
+
+    ln -s "${BAZEL_INSTALL_BASE}/bin/bazel-real" "${BAZEL_INSTALL_BIN}/bazel"
+
+    "${BAZEL_INSTALL_BIN}/bazel" help >/dev/null
+  fi
 )
 rm -rf $BUILD_DIR
 
