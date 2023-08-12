@@ -228,9 +228,7 @@ mkdir -p $BUILD_DIR
     mkdir -p ${BAZEL_INSTALL_BIN} ${BAZEL_INSTALL_BASE}/bin ${BAZEL_INSTALL_BASE}/etc
 
     cp ${INSTALLER_NAME} "${BAZEL_INSTALL_BASE}/bin/bazel-real"
-    # cp ${INSTALLER_NAME} "${BAZEL_INSTALL_BASE}/bin/bazel"
     chmod 0755 "${BAZEL_INSTALL_BASE}/bin/bazel-real"
-    # chmod 0755 "${BAZEL_INSTALL_BASE}/bin/bazel"
 
     chmod -R og-w "${BAZEL_INSTALL_BASE}"
     chmod -R og+rX "${BAZEL_INSTALL_BASE}"
