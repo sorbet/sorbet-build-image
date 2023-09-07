@@ -4,6 +4,8 @@
 FROM ubuntu:18.04
 
 ADD bazel_loader bazel_loader
+# Install libstdc++6 from ppa:ubuntu-toolchain-r/test to get GLIBCXX_3.4.26
+# Unfortunately 18.04 repositories only provide GLIBCXX_3.4.25
 RUN apt-get update && \
       apt-get install --no-install-recommends -y autoconf ca-certificates curl debconf-utils file g++ git gpg-agent jq libgmp-dev libreadline-dev libssl-dev libtinfo-dev libxml2 make moreutils openssh-client patch pkg-config python ruby rubygems software-properties-common unzip wget xxd zip zlib1g-dev && \
       curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
