@@ -43,6 +43,6 @@ RUN rbenv install 3.3.0
 RUN rbenv global 3.1.2
 
 ENV TINI_VERSION v0.18.0
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static /tini
+RUN curl -fsSL -o /tini https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static-$(dpkg --print-architecture)
 RUN chmod +x /tini
 ENTRYPOINT ["/tini", "-g", "--"]
