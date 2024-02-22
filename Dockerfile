@@ -8,7 +8,7 @@ ADD bazel_loader bazel_loader
 # Install libstdc++6 from ppa:ubuntu-toolchain-r/test to get GLIBCXX_3.4.26
 # Unfortunately 18.04 repositories only provide GLIBCXX_3.4.25
 RUN apt-get update && \
-      apt-get install --no-install-recommends -y autoconf ca-certificates curl debconf-utils file g++ git gpg-agent jq libgmp-dev libreadline-dev libffi-dev libssl-dev libtinfo-dev libxml2 libyaml-dev make moreutils openssh-client patch pkg-config python ruby rubygems software-properties-common unzip wget xxd xz-utils zip zlib1g-dev && \
+      apt-get install --no-install-recommends -y autoconf ca-certificates curl debconf-utils file g++ git gpg-agent jq libgmp-dev libreadline-dev libffi-dev libssl-dev libtinfo-dev libxml2 libyaml-dev make moreutils openssh-client patch pkg-config python ruby rubygems software-properties-common unzip wget xxd xz-utils zip zlib1g-dev libtinfo5 && \
       curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
       echo "deb https://deb.nodesource.com/node_14.x bionic main" | tee /etc/apt/sources.list.d/nodesource.list && \
       echo "deb-src https://deb.nodesource.com/node_14.x bionic main" | tee -a /etc/apt/sources.list.d/nodesource.list && \
