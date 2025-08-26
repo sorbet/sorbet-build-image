@@ -36,10 +36,9 @@ ENV PATH=/root/.rbenv/bin:/root/.rbenv/shims:$PATH
 RUN curl -fsSL https://raw.githubusercontent.com/rbenv/rbenv-installer/108c12307621a0aa06f19799641848dde1987deb/bin/rbenv-installer | bash -x
 RUN echo 'eval "$(rbenv init -)"' >> /etc/profile.d/rbenv.sh
 RUN echo 'eval "$(rbenv init -)"' >> /root/.bashrc
-RUN rbenv install 2.7.2
-RUN rbenv install 2.7.7
 RUN rbenv install 3.1.2
 RUN rbenv install 3.3.0
+RUN rbenv install 3.4.5
 RUN rbenv global 3.1.2
 
 ENV TINI_VERSION v0.18.0
