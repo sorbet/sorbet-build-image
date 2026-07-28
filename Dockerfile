@@ -4,25 +4,24 @@
 FROM ubuntu:20.04
 ARG DEBIAN_FRONTEND=noninteractive
 
-ADD bazel_loader bazel_loader
-# Install libstdc++6 from ppa:ubuntu-toolchain-r/test to get GLIBCXX_3.4.26
-# Unfortunately 18.04 repositories only provide GLIBCXX_3.4.25
+# Useful debugging commands / Docker cheatsheet:
+#
+#     # Interactive shell inside a container:
+#     docker run --rm -it ubuntu:20.04 bash
+#
+#     # Flags that make building respect the host's HTTP proxy settings
+#     --network host --build-arg http_proxy="$http_proxy" --build-arg https_proxy="$https_proxy" --build-arg no_proxy="$no_proxy"
+
 RUN apt-get update && \
-      apt-get install --no-install-recommends -y autoconf ca-certificates curl debconf-utils file g++ git gpg-agent jq libgmp-dev libreadline-dev libffi-dev libssl-dev libtinfo-dev libxml2 libyaml-dev make moreutils openssh-client patch pkg-config python ruby rubygems software-properties-common unzip wget xxd xz-utils zip zlib1g-dev libtinfo5 && \
-      curl -fsSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
-      echo "deb https://deb.nodesource.com/node_14.x bionic main" | tee /etc/apt/sources.list.d/nodesource.list && \
-      echo "deb-src https://deb.nodesource.com/node_14.x bionic main" | tee -a /etc/apt/sources.list.d/nodesource.list && \
-      curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-      echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-      curl -sS https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - && \
-      echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-9 main" | tee /etc/apt/sources.list.d/llvm.list && \
+      apt-get install --no-install-recommends -y autoconf ca-certificates curl debconf-utils file g++ git gpg-agent jq libasound2 libatk-bridge2.0-0 libatk1.0-0 libdrm2 libffi-dev libgbm1 libgdk-pixbuf2.0-0 libgmp-dev libgtk-3-0 libnss3-dev libreadline-dev libssl-dev libtinfo-dev libtinfo5 libxml2 libxshmfence-dev libyaml-dev make moreutils openssh-client patch pkg-config python ruby rubygems software-properties-common unzip wget xvfb xxd xz-utils zip zlib1g-dev
+RUN mkdir -p /usr/share/keyrings /etc/apt/keyrings && \
+      curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /usr/share/keyrings/nodesource.gpg && \
+      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_16.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
+      echo "deb-src [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_16.x nodistro main" | tee -a /etc/apt/sources.list.d/nodesource.list && \
+      curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor -o /etc/apt/keyrings/yarn-archive-keyring.gpg && \
+      echo "deb [signed-by=/etc/apt/keyrings/yarn-archive-keyring.gpg] https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
       apt-get update && \
-      apt-get install --no-install-recommends -y nodejs yarn clang-9 && \
-      add-apt-repository --yes ppa:ubuntu-toolchain-r/test && \
-      apt-get update && \
-      apt-get install --yes --only-upgrade libstdc++6 && \
-      cd bazel_loader && \
-      ./bazel version && \
+      apt-get install --no-install-recommends -y nodejs yarn && \
       rm -rf /var/lib/apt/lists/*
 
 RUN curl -fsSOL https://github.com/koalaman/shellcheck/releases/download/v0.7.2/shellcheck-v0.7.2.linux.$(arch).tar.xz && \
@@ -36,10 +35,10 @@ ENV PATH=/root/.rbenv/bin:/root/.rbenv/shims:$PATH
 RUN curl -fsSL https://raw.githubusercontent.com/rbenv/rbenv-installer/108c12307621a0aa06f19799641848dde1987deb/bin/rbenv-installer | bash -x
 RUN echo 'eval "$(rbenv init -)"' >> /etc/profile.d/rbenv.sh
 RUN echo 'eval "$(rbenv init -)"' >> /root/.bashrc
-RUN rbenv install 3.1.2
-RUN rbenv install 3.3.0
-RUN rbenv install 3.4.5
-RUN rbenv global 3.1.2
+RUN rbenv install 3.3.12
+RUN rbenv install 3.4.9
+RUN rbenv install 4.0.6
+RUN rbenv global 3.3.12
 
 ENV TINI_VERSION v0.18.0
 RUN curl -fsSL -o /tini https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-static-$(dpkg --print-architecture)
