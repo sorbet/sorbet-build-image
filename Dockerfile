@@ -6,15 +6,14 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 # Useful debugging commands / Docker cheatsheet:
 #
-#   # Interactive shell inside a container:
-#   docker run --rm -it --platform linux/arm64 ubuntu:20.04 bash
+#     # Interactive shell inside a container:
+#     docker run --rm -it ubuntu:20.04 bash
 #
-#   # Flags that make building respect the host's HTTP proxy settings
-#   --network host --build-arg http_proxy="$http_proxy" --build-arg https_proxy="$https_proxy" --build-arg no_proxy="$no_proxy"
+#     # Flags that make building respect the host's HTTP proxy settings
+#     --network host --build-arg http_proxy="$http_proxy" --build-arg https_proxy="$https_proxy" --build-arg no_proxy="$no_proxy"
 
-ADD bazel_loader bazel_loader
 RUN apt-get update && \
-      apt-get install --no-install-recommends -y autoconf ca-certificates curl debconf-utils file g++ git gpg-agent jq libgmp-dev libreadline-dev libffi-dev libssl-dev libtinfo-dev libxml2 libyaml-dev make moreutils openssh-client patch pkg-config python ruby rubygems software-properties-common unzip wget xxd xz-utils zip zlib1g-dev libtinfo5
+      apt-get install --no-install-recommends -y autoconf ca-certificates curl debconf-utils file g++ git gpg-agent jq libasound2 libatk-bridge2.0-0 libatk1.0-0 libdrm2 libffi-dev libgbm1 libgdk-pixbuf2.0-0 libgmp-dev libgtk-3-0 libnss3-dev libreadline-dev libssl-dev libtinfo-dev libtinfo5 libxml2 libxshmfence-dev libyaml-dev make moreutils openssh-client patch pkg-config python ruby rubygems software-properties-common unzip wget xvfb xxd xz-utils zip zlib1g-dev
 RUN mkdir -p /usr/share/keyrings /etc/apt/keyrings && \
       curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /usr/share/keyrings/nodesource.gpg && \
       echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_16.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
@@ -23,8 +22,6 @@ RUN mkdir -p /usr/share/keyrings /etc/apt/keyrings && \
       echo "deb [signed-by=/etc/apt/keyrings/yarn-archive-keyring.gpg] https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
       apt-get update && \
       apt-get install --no-install-recommends -y nodejs yarn && \
-      cd bazel_loader && \
-      ./bazel version && \
       rm -rf /var/lib/apt/lists/*
 
 RUN curl -fsSOL https://github.com/koalaman/shellcheck/releases/download/v0.7.2/shellcheck-v0.7.2.linux.$(arch).tar.xz && \
